@@ -6,9 +6,9 @@ require "bundler/gem_tasks"
 # RSpec::Core::RakeTask.new(:spec)
 
 task :spec do
-  puts `rspec spec/assume_spec.rb`
-  puts `rspec spec/core_ext_spec.rb`
-  puts `rspec spec/refine_spec.rb`
+  sh "rspec spec/assume_spec.rb"
+  sh "rspec spec/core_ext_spec.rb"
+  sh "rspec spec/refine_spec.rb"
 end
 task default: :spec
 
