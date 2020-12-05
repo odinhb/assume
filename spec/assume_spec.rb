@@ -5,7 +5,7 @@ RSpec.describe Assume do
     expect(Assume::VERSION).not_to be nil
   end
 
-  it "is not available by default" do
+  it "is not available by default", :aggregate_failures do
     expect { assume { true } }
       .to raise_error(NoMethodError)
     expect { assumption { true } }

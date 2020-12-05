@@ -1,1 +1,5 @@
-# create a refinement
+module Assumptions
+  refine Kernel do
+    include Assume
+  end
+end

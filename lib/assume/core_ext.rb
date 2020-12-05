@@ -1,2 +1,3 @@
-
-# TODO: monkey patch the kernel
+class Object
+  include Assume
+end
