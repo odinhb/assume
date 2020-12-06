@@ -15,8 +15,8 @@ module Assume
     end
 
     raise BadAssumption, "\nin #{filename}\nsource" \
-                            "code (line #{line}):\n#{line_content}\n" \
-                            "result was: #{result.inspect}"
+                         "code (line #{line}):\n#{line_content}\n" \
+                         "result was: #{result.inspect}"
   end
 
   def assume(&block)
