@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 RSpec.describe Assume, :aggregate_failures do
+  before(:each) do
+    Assume.enabled = false
+  end
+
   it "has a version number" do
     expect(Assume::VERSION).not_to be nil
   end
@@ -60,7 +64,38 @@ RSpec.describe Assume, :aggregate_failures do
         end
       end
 
-      describe "with a custom handler" do
+      describe "custom handlers" do
+        before(:each) do
+          Assume.enabled = true
+        end
+
+        it "requires that the handler respond to #call" do
+          Assume.enabled = false
+
+          expect { Assume.handler = 3 }
+            .to raise_error(ArgumentError, /must respond to #call/)
+
+          expect { Assume.handler = "test" }
+            .to raise_error(ArgumentError, /must respond to #call/)
+
+          expect { Assume.handler = :oink }
+            .to raise_error(ArgumentError, /must respond to #call/)
+
+          callable_class = Class.new do
+            def call
+              puts " i waas called"
+            end
+          end
+          callable_instance = callable_class.new
+
+          expect {
+            Assume.handler = callable_instance
+            Assume.handler = ->(x) { x * 2 }
+            Assume.handler = lambda { |test| "#{test}x2" }
+            Assume.handler = proc { "oh noes" }
+          }.not_to raise_error
+        end
+
         it "runs the block set as handler" do
           bad = 0
           Assume.handler = proc { bad += 1 }

@@ -2,6 +2,10 @@
 
 Assume is a tool that helps you record your assumptions about code directly in the code you're writing. It is similiar in functionality to and directly inspired by [solid_assert](https://rubygems.org/gems/solid_assert).
 
+As opposed to solid_assert, this gem has you write your assumptions in ruby code blocks.
+The idea behind this is that the assumption does not need to be evaluated in your production/release environment, reserving expensive checks for development/test environments which only
+affect developers.
+
 ## What?
 
 We make lots of assumptions when we write code. [Programming with assertions](https://docs.oracle.com/javase/8/docs/technotes/guides/language/assert.html) is a technique that helps you catch problems with your assumptions earlier in the development process.  
@@ -9,7 +13,7 @@ We make lots of assumptions when we write code. [Programming with assertions](ht
 Assertions live in a subtle space between testing your code explicitly and
 raising exceptions to enforce your api behaviour or handle edge cases. It is not a replacement for either.
 
-This gem is an attempt to make the concept less computer-sciency and more english, encouraging you to think about and record your assumptions as you go, maybe even leave them in the codebase for your colleagues to find, so they may understand your thinking, and thus your code, better.
+This gem is an attempt to make the concept less computer-sciency and more english, encouraging you to think about and record your assumptions as you go and leave them in the codebase for your colleagues to find, so they may understand your thinking, and thus your code, better.
 
 ## Why tho?
 
@@ -30,7 +34,7 @@ end
 
 We know we don't need to perform another check on i, as we've exhausted all other options, but what happens when 'Dave' comes along next month and extends the enum to allow a 4?
 
-By recording our assumption in code, 'Dave' will (hopefully) test his new enum and quickly discover that he broke our previous assumptions.
+By recording our assumption in code, 'Dave' will (hopefully) test his new enum value and quickly discover that he broke our previous assumption.
 
 If he happens to read our code, it will say *right there in the code* that he's broken it, and he'll know to fix it.
 
@@ -72,16 +76,31 @@ You're doing some control flow you know will never happen
   def something(arg)
     case arg
     when 1
+      :option1
     when 2
+      :option2
     when 3
+      :option3
     else
       # instead of raise "this should never happen"
-      assume { false } # maybe real users don't need to notice, since this is not actually dangerous
+      # maybe real users don't need to notice, since this is not actually dangerous
+      assume { false }
+
+      :option1 # .. as long as we return the default option
     end
   end
 ```
 
 ## Installation
+
+Open `assume/lib/assume.rb` and copy/paste it into your project.
+
+The code is trivial, and you may want to customize it to behave
+differently or have a different interface.
+
+Since making this gem I have done this myself, and recommend it.
+
+### Using rubygems
 
 Add this line to your application's Gemfile:
 
@@ -114,7 +133,7 @@ require "assume/core_ext" # monkey-patches Object to provide the methods everywh
 ```
 
 ```ruby
-require "assume/refine" # Loads Assumptions
+require "assume/refine" # Loads Assumptions, a module containing a refinement
 
 class Whatever
   using Assumptions # assume's methods are now available in this class
@@ -181,7 +200,7 @@ Don't use assume and rescue BadAssumption as an error handling mechanism.
 Make your own error class and `raise`/`rescue` it.  
 Don't use assume to enforce the public api of a class/method. `raise ArgumentError` instead.  
 
-You should probably not use assume directly in a test case (you've already got expect/assert/whatever) but if the code under test uses assume and assume is enabled in your test suite, bonus! Your test suite is now more robust!
+You should probably not use assume directly in a test case (you've already got expect/assert/whatever) but if the code under test uses assume and assume is enabled in your test suite, bonus!
 
 ## Advanced
 
@@ -210,7 +229,7 @@ the block's #source_location method points it at. E.g. it will not print any sou
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-Warning: Do not use `rspec` to run all the tests, they will fail as they are testing require statements. Use `rake`.
+Use `rake test` to run the tests. `rake` and `rake spec` also works.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 

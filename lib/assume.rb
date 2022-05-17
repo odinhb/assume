@@ -35,6 +35,10 @@ module Assume
 
   class << self
     def handler=(handler)
+      unless handler.respond_to?(:call)
+        raise ArgumentError, "Assume::handler must respond to #call"
+      end
+
       @assumption_handler = handler
     end
 

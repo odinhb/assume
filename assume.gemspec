@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Odin H B"]
   spec.email         = ["odinh2908@gmail.com"]
 
-  spec.summary       = "Write your assumptions down - in code"
-  spec.description   = "Assume encourages you to communicate with your team members and build confidence in your code"
+  spec.summary       = "Be honest about your (code's) assumptions"
+  spec.description   = "Assume is an assert library with a better name"
   spec.homepage      = "https://github.com/odinhb/assume"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
